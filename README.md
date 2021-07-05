@@ -28,7 +28,7 @@ node version 14.0
 
 :wrench: Backend :
     * frameworks :  Express
-    * packages : mongoose / 
+    * packages : mongoose / mongoose-unique-validator / bcrypt / body-parser / jsonwebtoken
     * modules: dotenv / 
 
 ### :wrench: Installation
