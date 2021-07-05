@@ -12,7 +12,7 @@ const userCtrl = require('../controllers/user');
 // ------------------------- ROADS ----------------------------
 
 router.post('/signup', userCtrl.signup);
-router.post('/login', userCtrl.signup);
+router.post('/login', userCtrl.login);
 
 // ============================================================
 // ------------------------- EXPORT ---------------------------
