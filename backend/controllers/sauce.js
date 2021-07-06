@@ -1,6 +1,7 @@
 // Sauce Controls
 // ------------------------- IMPORTS -------------------------
 
+const fs = require('fs'); // package from node (file system)
 // ---- import User Model
 const Sauce = require('../models/Sauce');
 
@@ -57,9 +58,20 @@ exports.modifySauce = (req, res, next) => {
 // ---- Delete Sauce
 
 exports.deleteSauce = (req, res, next) => {
-    Sauce.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Sauce supprimée' }))
-        .catch(error => res.status(400).json({ error }));
+    // search the name of the file
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            // seach name of file
+            const filename = sauce.imageUrl.split('/images/')[1];
+            // use fs 'file system' to delete from folder "images"
+            fs.unlink(`images/${filename}`, () => {
+                // and from the db
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Sauce supprimée : ' + filename }))
+                    .catch(error => res.status(400).json({ error }));
+            })
+        })
+        .catch(error => res.status(500).json({ error }));
 }
 
 
