@@ -5,16 +5,18 @@ const express = require('express'); // Express Framework
 // ----- Create router
 const router = express.Router();
 
+// ---- Import middelwares
+const auth = require('../middleware/auth'); // to protect road (token)
+const multer = require('../middleware/multer-config'); // to upload img
+
 // ----- Import Controlls
 const sauceCtrl = require('../controllers/sauce');
-// ---- Import middelwares
-const auth = require('../middleware/auth');
 
 
 // ============================================================
 // ------------------------- ROADS ----------------------------
 
-router.post('/', auth, sauceCtrl.createSauce);
+router.post('/', auth, multer, sauceCtrl.createSauce);
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 router.get('/', auth, sauceCtrl.getAllSauces);
 
