@@ -6,7 +6,7 @@ const bodyParser = require('body-parser'); // Package (to format body (ex: from 
 
 // ---- Import Roads
 const userRoutes = require('./routes/user');
-
+const sauceRoutes = require('./routes/sauce');
 
 // ============================================================
 // ----------------------- Create app -------------------------
@@ -35,6 +35,7 @@ app.use(bodyParser.json());
 
 // --- Roads
 app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 
 
