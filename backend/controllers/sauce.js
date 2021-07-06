@@ -8,7 +8,7 @@ const Sauce = require('../models/Sauce');
 // ============================================================
 // -------------------------- CONTROLS ------------------------
 
-// ---- Create 
+// ---- Create new Sauce
 exports.createSauce = (req, res, next) => {
     // récupère et transforme chaine en objet js
     const sauceObject = JSON.parse(req.body.sauce);
@@ -29,6 +29,27 @@ exports.createSauce = (req, res, next) => {
     sauce.save()
         .then(() => res.status(201).json({ message: 'Sauce créée' })) // response need to be send to front
         .catch(error => res.status(400).json({ error : 'NOpe' +error }));
+};
+
+
+// ---- Modify Sauce
+
+exports.modifySauce = (req, res, next) => {
+    // create the object js from modif :
+    const sauceObject = req.file ? // check if user has made a modif
+        { // yes
+            ...JSON.parse(req.body.sauce), 
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } 
+        : { ...req.body }; // no
+
+    // update the sauce from parameter id
+    Sauce.updateOne({ _id: req.params.id }, {
+        ...sauceObject,
+        _id: req.params.id
+    })
+    .then(() => res.status(200).json({ message: 'Sauce modifiée' }))
+    .catch(error => res.status(400).json({ error }));
 };
 
 
