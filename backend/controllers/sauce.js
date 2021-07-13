@@ -21,10 +21,10 @@ exports.createSauce = (req, res, next) => {
         ...sauceObject, // spread operator (copy all ...)
         // url image ex: http + :// + host + /images/ + name passed by multer
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        likes: 0,
-        dislikes: 0,
-        usersLiked: [] ,
+        usersLiked: [],
         usersDisliked: [],
+        likes: 0,
+        dislikes: 0
     });
 
     // save new sauce in db
@@ -40,9 +40,9 @@ exports.modifySauce = (req, res, next) => {
     // create the object js from modif :
     const sauceObject = req.file ? // check if user has made a modif
         { // yes
-            ...JSON.parse(req.body.sauce), 
+            ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        } 
+        }
         : { ...req.body }; // no
 
     // update the sauce from parameter id
@@ -81,180 +81,59 @@ exports.likeSauce = (req, res, next) => {
     const userChoice = req.body.like;
     const filter = { _id: req.params.id };
 
+
     Sauce.findOne(filter)
         .then(thisSauce => {
-        
             let update;
 
-            if(userChoice === 1) {
-                update = { 
-                    '$addToSet': { usersLiked: userId },
-                    '$inc': { likes: 1 }
+            // user vote Like
+            if (userChoice === 1) {
+                update = {
+                    '$addToSet': { 'usersLiked': userId },
+                    '$inc': { 'likes': 1 }
                 };
             }
-
-            if(userChoice === -1) {
-                update = { 
-                    '$addToSet': { usersDisliked: userId },
-                    '$inc': { dislikes: 1 }
+            // user vote Dislike
+            if (userChoice === -1) {
+                update = {
+                    '$addToSet': { 'usersDisliked': userId },
+                    '$inc': { 'dislikes': 1 }
                 };
             }
-
-            if(userChoice === 0) {
-                if(thisSauce.usersLiked.includes(userId)) {
-                    update = { 
-                        '$pull': { 
-                            usersLiked: userId
+            // user Cancel
+            if (userChoice === 0) {
+                // & has already Liked before
+                if (thisSauce.usersLiked.includes(userId)) {
+                    update = {
+                        '$pull': {
+                            'usersLiked': userId,
                         },
-                        '$inc': { likes: -1 }
+                        '$inc': { 'likes': -1 }
                     };
                 }
-                if(thisSauce.usersDisliked.includes(userId)) {
-                    update = { 
-                        '$pull': { 
-                            usersDisliked: userId
+                // & has already Dislike before
+                if (thisSauce.usersDisliked.includes(userId)) {
+                    update = {
+                        '$pull': {
+                            'usersDisliked': userId
                         },
-                        '$inc': { dislikes: -1 }
+                        '$inc': { 'dislikes': -1 }
                     };
                 }
             }
 
-            Sauce.updateOne(filter,update)
+            Sauce.updateOne(filter, update)
                 .then(() => res.status(200).json({ message: 'changes are made here (like or dislike whatever ..' }))
-                .catch(error => res.status(400).json({ error: error + 'erreur udpate' }));
-        })
-        .catch(error => res.status(400).json({ error }));
-
-
-
-/* TESTS */
-/*     Sauce.updateOne(
-        { _id: req.params.id }, {
-        // add userId in array usersLike
-        
-        $set : {
-            $cond: [ { $eq: [userChoice, 0] }, 
-                { $pull: { usersLiked: userId, 
-                        usersDisliked: userId }}, 
-                {
-                    $push: { usersLiked: userId }
-                } 
-            
-            
-            ] */
-
-
-            /*{ $switch: {
-                branches: [
-                        { 
-                            case: { $eq: [ userChoice, 1] }, 
-                            then: { $push: { usersLiked: userId } }
-                        },
-
-                        { 
-                            case: { $eq: [userChoice, -1] }, 
-                            then: { $push: { usersDisliked: userId }}
-                        },
-
-                        { 
-                            case: { $eq: [userChoice, 0] }, 
-                            then: { $pull: { usersLiked: userId, 
-                                            usersDisliked: userId }}
-                        },
-                        {
-                            default: { $inc: { likes: 1 } }
-                        }
-                        
-                ]
-            } }*/
-        
-/*     })
-        .then(() => res.status(200).json({ message: '' }))
-        .catch(error => res.status(400).json({ error })); */
-
-
-/* 
-    // user has like the Sauce & not already liked
-    if (userChoice === 1 ) {
-        Sauce.updateOne(
-            { _id: req.params.id }, {
-            // add userId in array usersLike
-            $push: { usersLiked: userId },
-        })
-            .then(() => res.status(200).json({ message: 'L\'utilisateur a aimé la Sauce' }))
-            .catch(error => res.status(400).json({ error }));
-    }
-
-    // user has dislike the Sauce
-    if (userChoice < 0 ) {
-        Sauce.updateOne({ _id: req.params.id}, {
-            // add userId in array usersDislike
-            $push: { usersDisliked: userId },
-        })
-            .then(() => res.status(200).json({ message: 'L\'utilisateur n\'a pas aimé la Sauce' }))
-            .catch(error => res.status(400).json({ error }));
-    }
-
-
-    // user reset choice
-    if (userChoice === 0 ) {
-        Sauce.updateOne({ _id: req.params.id}, {
-            $pull: { usersLiked: userId, 
-                    usersDisliked: userId }
-        })
-            .then(() => res.status(200).json({ message: 'L\'utilisateur reset' }))
-            .catch(error => res.status(400).json({ error }));
-    } */
-
-
-
-
-/*     Sauce.findOne({ _id: req.params.id })
-        .then(thisSauce => {
-
-            // user has like the Sauce & not already liked
-            if (userChoice === 1 && !thisSauce.usersLiked.includes(userId)) {
-                // then add a like and userid
-                thisSauce.usersLiked.push(userId);
-                thisSauce.likes ++;
-                // check if user has disliked before
-                if ( thisSauce.usersDisliked.includes(userId) ) {
-                    // delete userId from array of usersDislike & delete one dislike
-                    thisSauce.usersDisliked = array.filter(e => e != "userId");
-                    thisSauce.dislikes -= 1;
-                }
-            }
-
-            // user has dislike the Sauce
-            if (userChoice < 0 && !thisSauce.userDisliked.includes(userId)) {
-                // then add a dislike and userid
-                thisSauce.usersDisliked.push(userId);
-                thisSauce.dislikes ++;
-                // check if user has liked before
-                if ( thisSauce.usersLiked.includes(userId) ) {
-                    // delete userId from array of usersDislike & delete one dislike
-                    thisSauce.usersLiked = array.filter(e => e != "userId");
-                    thisSauce.likes -= 1;
-                }
-            }
-
-            console.log(thisSauce);
-            // update the sauce from parameter id
-            Sauce.updateOne({ _id: thisSauce._id }, {
-                
-            })
-                .then(() => res.status(200).json({ message: 'Sauce modifiée' }))
                 .catch(error => res.status(400).json({ error }));
         })
-        .catch(error => res.status(400).json({ error })); */
-
+        .catch(error => res.status(400).json({ error }));
 }
 
 
 
 // ---- Get One Sauce
 
-exports.getOneSauce = ( req, res, next) => {
+exports.getOneSauce = (req, res, next) => {
     // find one sauce from id param
     Sauce.findOne({ _id: req.params.id })
         .then(thisSauce => res.status(200).json(thisSauce))
@@ -264,7 +143,7 @@ exports.getOneSauce = ( req, res, next) => {
 
 // ---- Get All Sauces
 
-exports.getAllSauces = ( req, res, next) => {
+exports.getAllSauces = (req, res, next) => {
     // find all things in mongoDb
     Sauce.find()
         .then(allSauces => res.status(200).json(allSauces))
