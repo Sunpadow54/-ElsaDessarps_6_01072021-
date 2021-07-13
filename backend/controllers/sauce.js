@@ -81,50 +81,66 @@ exports.likeSauce = (req, res, next) => {
     const userChoice = req.body.like;
     const filter = { _id: req.params.id };
 
-
     Sauce.findOne(filter)
         .then(thisSauce => {
+
+            // Check if the user has already vote and what (from db)
+            let hasAlreadyVote = thisSauce.usersLiked.includes(userId) ? 'like'
+                : thisSauce.usersDisliked.includes(userId) ? 'dislike'
+                : false;
+            
+            // Initialize 'update' variable for next crud unpdateOne
             let update;
 
-            // user vote Like
-            if (userChoice === 1) {
-                update = {
-                    '$addToSet': { 'usersLiked': userId },
-                    '$inc': { 'likes': 1 }
-                };
-            }
-            // user vote Dislike
-            if (userChoice === -1) {
-                update = {
-                    '$addToSet': { 'usersDisliked': userId },
-                    '$inc': { 'dislikes': 1 }
-                };
-            }
-            // user Cancel
-            if (userChoice === 0) {
-                // & has already Liked before
-                if (thisSauce.usersLiked.includes(userId)) {
-                    update = {
-                        '$pull': {
-                            'usersLiked': userId,
-                        },
-                        '$inc': { 'likes': -1 }
-                    };
-                }
-                // & has already Dislike before
-                if (thisSauce.usersDisliked.includes(userId)) {
-                    update = {
-                        '$pull': {
-                            'usersDisliked': userId
-                        },
-                        '$inc': { 'dislikes': -1 }
-                    };
-                }
+            // Populate 'update' variable according to user vote
+            switch (userChoice) {
+                // Like
+                case (1):
+                    if (!hasAlreadyVote) {
+                        update = {
+                            '$addToSet': { 'usersLiked': userId },
+                            '$inc': { 'likes': 1 }
+                        };
+                    }
+                    break;
+                // Dilike
+                case (-1):
+                    if (!hasAlreadyVote) {
+                        update = {
+                            '$addToSet': { 'usersDisliked': userId },
+                            '$inc': { 'dislikes': 1 }
+                        };
+                    }
+                    break;
+                // Reset
+                case (0):
+                    // user has already Liked before
+                    if (hasAlreadyVote === 'like') {
+                        update = {
+                            '$pull': {
+                                'usersLiked': userId,
+                            },
+                            '$inc': { 'likes': -1 }
+                        };
+                    }
+                    // user has already Dislike before
+                    if (hasAlreadyVote === 'dislike') {
+                        update = {
+                            '$pull': {
+                                'usersDisliked': userId
+                            },
+                            '$inc': { 'dislikes': -1 }
+                        };
+                    }
+                    break;
             }
 
-            Sauce.updateOne(filter, update)
-                .then(() => res.status(200).json({ message: 'changes are made here (like or dislike whatever ..' }))
-                .catch(error => res.status(400).json({ error }));
+            // Update with 'update' var :  Likes/Dislikes (if there is a proper changes)
+            if (update !== undefined) {
+                Sauce.updateOne(filter, update)
+                    .then(() => res.status(200).json({ message: 'changes are made here (like or dislike whatever ..' }))
+                    .catch(error => res.status(400).json({ error }));
+            }
         })
         .catch(error => res.status(400).json({ error }));
 }
