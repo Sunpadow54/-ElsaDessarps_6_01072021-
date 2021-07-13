@@ -4,6 +4,8 @@
 const express = require('express'); // framework express
 const bodyParser = require('body-parser'); // Package (to format body (ex: from Post request) )
 const path = require('path'); // from node
+//security
+const mongoSanitize = require('express-mongo-sanitize');
 
 // ---- Import Roads
 const userRoutes = require('./routes/user');
@@ -34,7 +36,10 @@ app.use((req, res, next) => {
 // --- Format Json
 app.use(bodyParser.json());
 
-// middleware (to upload file) (after multer)
+// --- security
+app.use(mongoSanitize()); // protect from injection (change all '$' and '.' from req)
+
+// --- middleware (to upload file) (after multer)
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // --- Roads
