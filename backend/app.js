@@ -4,8 +4,9 @@
 const express = require('express'); // framework express
 const bodyParser = require('body-parser'); // Package (to format body (ex: from Post request) )
 const path = require('path'); // from node
-//security
+// security
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 // ---- Import Roads
 const userRoutes = require('./routes/user');
@@ -38,6 +39,7 @@ app.use(bodyParser.json());
 
 // --- security
 app.use(mongoSanitize()); // protect from injection (change all '$' and '.' from req)
+app.use(helmet()); // Protect from cross-site scripting (XSS)
 
 // --- middleware (to upload file) (after multer)
 app.use('/images', express.static(path.join(__dirname, 'images')));
