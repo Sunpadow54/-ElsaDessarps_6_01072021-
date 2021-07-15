@@ -31,12 +31,12 @@ Use **node version 14.0**
 :file_folder: **backend** :
 
 * frameworks :  <kbd>**Express**</kbd>
-* packages : <kbd>**mongoose**</kbd> / <kbd>**mongoose-unique-validator**</kbd> / <kbd>**bcrypt**</kbd> / <kbd>**body-parser**</kbd> / <kbd>**jsonwebtoken**</kbd> / <kbd>**multer**</kbd> <kbd>**express-mongo-sanitize**</kbd> / <kbd>**helmet**</kbd>
+* packages : <kbd>**mongoose**</kbd> / <kbd>**mongoose-unique-validator**</kbd> / <kbd>**bcrypt**</kbd> / <kbd>**body-parser**</kbd> / <kbd>**jsonwebtoken**</kbd> / <kbd>**multer**</kbd> <kbd>**express-mongo-sanitize**</kbd> / <kbd>**helmet**</kbd> / <kbd>**hpp**</kbd>
 * modules: <kbd>**dotenv**</kbd> 
 
 > Sur Windows, ces installations nécessitent d'utiliser PowerShell en tant qu'administrateur.
 
-dans les deux dossiers :
+dans les deux dossiers pour une installation rapide :
 ```
 npm install
 ```
