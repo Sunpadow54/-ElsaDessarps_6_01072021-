@@ -38,12 +38,26 @@ exports.createSauce = (req, res, next) => {
 
 exports.modifySauce = (req, res, next) => {
     // create the object js from modif :
-    const sauceObject = req.file ? // check if user has made a modif
+    const sauceObject = req.file ? // check if user has made a new upload of an image
         { // yes
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         }
         : { ...req.body }; // no
+
+    // Delete old image if a new one is upload
+    if(req.file) {
+        Sauce.findOne({ _id: req.params.id })
+            .then(sauce => {
+                // seach name of file
+                const filename = sauce.imageUrl.split('/images/')[1];
+                // if the file exist delete it
+                if (fs.existsSync(`images/${filename}`)) {
+                    fs.unlinkSync(`images/${filename}`);
+                }
+            })
+            .catch(error => res.status(400).json({ error }));
+    }
 
     // update the sauce from parameter id
     Sauce.updateOne({ _id: req.params.id }, {
@@ -52,6 +66,7 @@ exports.modifySauce = (req, res, next) => {
     })
         .then(() => res.status(200).json({ message: 'Sauce modifiée' }))
         .catch(error => res.status(400).json({ error }));
+
 };
 
 
