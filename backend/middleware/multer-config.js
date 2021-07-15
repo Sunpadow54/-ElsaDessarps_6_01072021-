@@ -4,28 +4,38 @@
 
 const multer = require('multer'); // package
 
-// dico types extensions
+// ---------------------- Mime Library -------------------------
+
+// lib types extensions
 const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
-    'image/png': 'png'
+    'image/png': 'png',
+    'image/webp': 'webp',
 };
 
-
+// ============================================================
+// ---------------------- Middlewares -------------------------
 
 // objet to config
-const imageStorage = multer.diskStorage({
-    // destination
+const storage = multer.diskStorage({
+
     destination: (req, file, callback) => {
         callback(null, 'images')
     },
-    // name
+
     filename: (req, file, callback) => {
-        const name = file.originalname.split(' ').join('_');
+        let name = file.originalname.split(' ').join('-'); // delete any space
+         // delete extension (could be : name = name.substring(0, name.lastIndexOf('.'));)
+        let newName = name.split('.');
+        newName.pop();
+        newName = newName.join('-');
+
+        // create extension from mimetype library
         const extension = MIME_TYPES[file.mimetype];
-        callback(null, name + Date.now() + '.' + extension);
+        callback(null, newName + '_' + Date.now() + '.' + extension);
     }
 })
 
 
-module.exports = multer({ storage: imageStorage }).single('image');
+module.exports = multer({ storage: storage }).single('image');
