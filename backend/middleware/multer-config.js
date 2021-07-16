@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 
     filename: (req, file, callback) => {
         let name = file.originalname.split(' ').join('-'); // delete any space
-         // delete extension (could be : name = name.substring(0, name.lastIndexOf('.'));)
+        // delete extension (could be : name = name.substring(0, name.lastIndexOf('.'));)
         let newName = name.split('.');
         newName.pop();
         newName = newName.join('-');
@@ -37,5 +37,8 @@ const storage = multer.diskStorage({
     }
 })
 
+
+// ============================================================
+// ------------------------- EXPORT ---------------------------
 
 module.exports = multer({ storage: storage }).single('image');

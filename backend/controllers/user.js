@@ -55,13 +55,13 @@ exports.login = (req, res, next) => {
                     res.status(200).json({
                         // send user _id & token auth
                         userId: user._id,
-                        token: jwToken.sign( 
-                                // 1rst param : payload : data we wants to encode
-                                { userId: user._id },
-                                // 2nd param : secret key for encode
-                                'RANDOM_TOKEN_SECRET',
-                                // 3rd param : to configure duration of the token
-                                { expiresIn: '24h' }
+                        token: jwToken.sign(
+                            // 1rst param : payload : data we wants to encode
+                            { userId: user._id },
+                            // 2nd param : secret key for encode
+                            'RANDOM_TOKEN_SECRET',
+                            // 3rd param : to configure duration of the token
+                            { expiresIn: '24h' }
                         )
                     });
                 })

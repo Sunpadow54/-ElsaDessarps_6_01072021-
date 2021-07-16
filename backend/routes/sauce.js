@@ -25,6 +25,7 @@ router.post('/:id/like', auth, multer, sauceCtrl.likeSauce);
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 router.get('/', auth, sauceCtrl.getAllSauces);
 
+
 // ============================================================
 // ------------------------- EXPORT ---------------------------
 

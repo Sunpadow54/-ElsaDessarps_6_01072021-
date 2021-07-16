@@ -27,5 +27,6 @@ const sauceSchema = mongoose.Schema({
 
 // ============================================================
 // ------------------------- EXPORT ---------------------------
+
 // ----- Export model-name (schema we want to use)
 module.exports = mongoose.model('Sauce', sauceSchema);

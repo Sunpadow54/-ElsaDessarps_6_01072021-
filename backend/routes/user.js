@@ -3,7 +3,6 @@
 
 const express = require('express'); // Express Framework
 
-
 // ----- Create router
 const router = express.Router();
 
@@ -19,6 +18,7 @@ const userCtrl = require('../controllers/user');
 
 router.post('/signup', limiter, userSignUpRules(), validateSignUp, userCtrl.signup);
 router.post('/login', limiter, userCtrl.login);
+
 
 // ============================================================
 // ------------------------- EXPORT ---------------------------

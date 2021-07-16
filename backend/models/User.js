@@ -18,7 +18,9 @@ const userSchema = mongoose.Schema({
 
 userSchema.plugin(uniqueValidator); // you can"t have the same emailaddress
 
+
 // ============================================================
 // ------------------------- EXPORT ---------------------------
+
 // ----- Export model user
 module.exports = mongoose.model('User', userSchema);

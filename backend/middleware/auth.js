@@ -16,14 +16,14 @@ module.exports = (req, res, next) => {
         // if id is not ok
         if (req.body.userId && req.body.userId !== userId) {
             throw 'Invalid user ID';
-        } 
+        }
 
         // if id is ok
         else {
             next();
         }
     }
-    
+
     // error
     catch {
         res.status(401).json({

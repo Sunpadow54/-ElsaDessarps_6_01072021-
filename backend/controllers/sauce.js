@@ -46,7 +46,7 @@ exports.modifySauce = (req, res, next) => {
         : { ...req.body }; // no
 
     // Delete old image if a new one is upload
-    if(req.file) {
+    if (req.file) {
         Sauce.findOne({ _id: req.params.id })
             .then(sauce => {
                 // seach name of file
@@ -102,8 +102,8 @@ exports.likeSauce = (req, res, next) => {
             // Check if the user has already vote and what (from db)
             let hasAlreadyVote = thisSauce.usersLiked.includes(userId) ? 'like'
                 : thisSauce.usersDisliked.includes(userId) ? 'dislike'
-                : false;
-            
+                    : false;
+
             // Initialize 'update' variable for next crud unpdateOne
             let update;
 

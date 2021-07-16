@@ -4,6 +4,7 @@
 
 const rateLimit = require('express-rate-limit'); // against Ddos attacks
 
+
 // ============================================================
 // ---------------------- Middlewares -------------------------
 
@@ -14,5 +15,8 @@ const limiter = rateLimit({
     message: 'Too many requests, please try again after 10 minutes',
 });
 
+
+// ============================================================
+// ------------------------- EXPORT ---------------------------
 
 module.exports = limiter;
