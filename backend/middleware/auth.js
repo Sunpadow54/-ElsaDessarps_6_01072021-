@@ -2,15 +2,18 @@
 // ------------------------- IMPORTS -------------------------
 
 const jwToken = require('jsonwebtoken');
+const dotEnv = require('dotenv'); // DotEnv
 
 // ============================================================
 // ---------------------- Middlewares -------------------------
 
 module.exports = (req, res, next) => {
     try {
+        dotEnv.config() // invoking the dotenv config for secret key token
+
         // get the token from header and compare
         const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwToken.verify(token, 'RANDOM_TOKEN_SECRET');
+        const decodedToken = jwToken.verify(token, process.env.TOKEN_KEY);
         const userId = decodedToken.userId;
 
         // if id is not ok

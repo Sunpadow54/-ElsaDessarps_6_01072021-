@@ -3,6 +3,7 @@
 
 const bcrypt = require('bcrypt'); // package password cryptage
 const jwToken = require('jsonwebtoken'); // package token
+const dotEnv = require('dotenv'); // DotEnv
 // ---- import User Model
 const User = require('../models/User');
 
@@ -51,15 +52,18 @@ exports.login = (req, res, next) => {
                         return res.status(401).json({ error: 'Mot de passe incorrect' });
                     }
 
+                    dotEnv.config(); // invoking the dotenv config for secret key token
+
                     // Password Good
                     res.status(200).json({
+
                         // send user _id & token auth
                         userId: user._id,
                         token: jwToken.sign(
                             // 1rst param : payload : data we wants to encode
                             { userId: user._id },
                             // 2nd param : secret key for encode
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.TOKEN_KEY,
                             // 3rd param : to configure duration of the token
                             { expiresIn: '24h' }
                         )
