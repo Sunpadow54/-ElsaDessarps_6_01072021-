@@ -37,8 +37,9 @@ const storage = multer.diskStorage({
     }
 })
 
+const maxSize = 3 * 1024 * 1024; // for 3MB/Mo (need to be in bytes)
 
 // ============================================================
 // ------------------------- EXPORT ---------------------------
 
-module.exports = multer({ storage: storage }).single('image');
+module.exports = multer({ storage: storage, limits: { fileSize: maxSize } }).single('image');
