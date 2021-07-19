@@ -41,13 +41,21 @@ dans les deux dossiers pour une installation rapide :
 npm install
 ```
 
-### 2. Paramétrer l'accès à mongodb
+### 2. Paramétrer dotenv
 
-Dans le fichier <kbd> :page_facing_up: .env</kbd> Changer le mot de passe, le nom de la base de donnée, & nom d'utilisateur
+Créer un fichier <kbd> :page_facing_up: .env </kbd> dans le dossier <kbd> :file_folder: backend </kbd> & Changer les variables d’environnement
+
+[See the sample](/backend/.env_sample)
+
 ```
-DB_NAME=<database name>
-DB_USER=<username>
-DB_PASS=<password>
+PORT=YOUR_PORT_HERE
+
+DB_URI=YOUR_MONGODB_URI_HERE
+DB_NAME=YOUR_DB_NAME_HERE
+DB_USER=YOUR_DB_USERNAME_HERE
+DB_PASS=YOUR_DB_PASWWORD_HERE
+
+TOKEN_KEY=YOUR_SECRET_JWTOKEN_KEY_HERE
 ```
 
 ### 3. Lancer le projet

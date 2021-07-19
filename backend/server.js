@@ -65,5 +65,4 @@ server.on('listening', () => {
 })
 
 // ----- Server wait requests
-//( variablee 'env.port...' if your environement where you use the app has a specifique port )
 server.listen(port);
