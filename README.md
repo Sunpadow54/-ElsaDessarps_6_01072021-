@@ -31,8 +31,8 @@ Use **node version 14.0**
 :file_folder: **backend** :
 
 * frameworks :  <kbd>**Express**</kbd>
-* packages : <kbd>**mongoose**</kbd> / <kbd>**mongoose-unique-validator**</kbd> / <kbd>**bcrypt**</kbd> / <kbd>**body-parser**</kbd> / <kbd>**jsonwebtoken**</kbd> / <kbd>**multer**</kbd> <kbd>**express-mongo-sanitize**</kbd> / <kbd>**helmet**</kbd> / <kbd>**hpp**</kbd> /<kbd>**express-rate-limit**</kbd>
-* modules: <kbd>**dotenv**</kbd> 
+* packages : <kbd>**mongoose**</kbd> / <kbd>**mongoose-unique-validator**</kbd> / <kbd>**bcrypt**</kbd> / <kbd>**body-parser**</kbd> / <kbd>**jsonwebtoken**</kbd> / <kbd>**multer**</kbd> <kbd>**express-mongo-sanitize**</kbd> / <kbd>**helmet**</kbd> / <kbd>**hpp**</kbd> /<kbd>**express-rate-limit**</kbd> / <kbd>**express-validator**</kbd>
+* modules: <kbd>**dotenv**</kbd> / <kbd>**crypto-js**</kbd>
 
 > Sur Windows, ces installations nécessitent d'utiliser PowerShell en tant qu'administrateur.
 
@@ -56,6 +56,8 @@ DB_USER=YOUR_DB_USERNAME_HERE
 DB_PASS=YOUR_DB_PASWWORD_HERE
 
 TOKEN_KEY=YOUR_SECRET_JWTOKEN_KEY_HERE
+
+EMAIL_CRYPTO_KEY=SECRET_22_LENGTH_KEY
 ```
 
 ### 3. Lancer le projet

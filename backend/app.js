@@ -21,7 +21,7 @@ const app = express();
 
 // ---------------- Mongoose DB Connexion ---------------------
 
-require('./db')(); // () used to show the messages log
+require('./config/db')(); // () used to show the messages log
 
 
 // ------------------------- MIDDLEWARES ----------------------

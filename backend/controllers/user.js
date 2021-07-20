@@ -4,6 +4,7 @@
 const bcrypt = require('bcrypt'); // package password cryptage
 const jwToken = require('jsonwebtoken'); // package token
 const dotEnv = require('dotenv'); // DotEnv
+const { encryptEmail } = require('../config/crypto.js'); // import crypto tool
 // ---- import User Model
 const User = require('../models/User');
 
@@ -19,7 +20,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(passwordHashed => {
             const user = new User({
-                email: req.body.email,
+                email: encryptEmail(req.body.email), // use crypto to mask email
                 password: passwordHashed
             });
             // Save in db
@@ -35,7 +36,7 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
     // find the user from the email he sent
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: encryptEmail(req.body.email) })
         .then(user => {
 
             // User does Not Exist
