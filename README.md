@@ -79,4 +79,4 @@ Dans le dossier <kbd> :file_folder: backend </kbd>
 
 ## Auteur
 
-Sunpadow - elsa dessarps - 2021
+Sunpadow - 2021
